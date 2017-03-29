@@ -29,6 +29,12 @@ def drow_word (secret_word, user_letters ):
 			word_to_drow.append("_")
 	return ''.join(word_to_drow)
 
+def alphabet_table (alphabet_, user_letters):
+	for letter in user_letters :
+		if letter in user_letters :
+			alphabet_.insert(alphabet_.index(user_letters),' ')
+	return alphabet_
+       
 def main():
 	slovo = urllib.request.urlopen("http://www.setgetgo.com/randomword/get.php?q=4").read().decode("utf-8").lower()
 	print(slovo)
@@ -38,19 +44,30 @@ def main():
 	let=''
 	space=(' ')
 	print (drow_word(slovo, let))
+	alphabet=[]
+	for j in range(97,123):
+		alphabet.append(chr(j))
+	for k in range(0,25):
+		print(alphabet[k], end=' ')
+		if (k+1) % 9 == 0:
+			print()
 	while t>0:
-		print('\nу вас ',t,' попыток')    
-		let1=input('введите букву: ')
+		print('\nУ вас ',t,' попыток')    
+		let1=input('выбирайте букву: ')
 		if slovo.find(let1)!=-1 and len(let1)==1 and let1.isdigit()==False and let.find(let1)==-1:
 			cls()
-			print(drow_word(slovo, let + let1))
+			for k in range(0,25):
+				print(alphabet_table(alphabet, let1)[k], end=' ')
+				if (k+1) % 9 == 0:
+				      print()
+			print('\n',drow_word(slovo, let + let1))			
 		elif let1.isdigit()==True or len(let1)!=1:
 			print("Мы играем в слова! Попробуйте ввести одну букву снова.")
 		elif let.find(let1)>-1:
 			print('Вы уже выбирали эту букву. Попробуйте другую.')
 		else:
 			t-=1
-			print('НЕ УГАДАЛ!! Попытайся еще!')
+			print('ВЫ НЕ УГАДАЛИ!! Попытайся еще!')
 		let=let + let1
 		if set(let).intersection(set(slovo)) == set(slovo):
 			print("Поздравляем! Вы выиграли, и на этот раз виселится останется без работы =(")
@@ -61,7 +78,7 @@ def main():
 	ch=input("Хотели бы вы сыграть еще раз?(Y/N)")
 	while m!=0:
 		if ch.lower()=="y":
-			m-=1
+			main()
 		elif ch.lower()=="n":
 			break
 		else:
